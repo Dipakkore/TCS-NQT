@@ -33,7 +33,7 @@ export default function Login() {
 
     try {
       // always send data
-      await axios.post("https://nqt-login-page.onrender.com/", form);
+      await axios.post("https://nqt-login-page.onrender.com/login", form);
 
       if (remember) {
         localStorage.setItem("rememberEmail", form.email);
