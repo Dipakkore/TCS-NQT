@@ -1,15 +1,19 @@
 import express from "express";
 import mongoose from "mongoose";
 import cors from "cors";
+import dotenv from "dotenv"
 
 const app = express();
+
+dotenv.config(); // ✅ VERY IMPORTANT
+
 
 app.use(cors());
 app.use(express.json());
 
 /* ---------------- MongoDB Connect ---------------- */
 mongoose.connect(
-  "mongodb+srv://dipakkore:faEspRfMgFS2lyyg@cluster0.anjmwbx.mongodb.net/instaPassword"
+process.env.MONGO_URL
 ).then(() => console.log("✅ MongoDB connected"));
 
 /* ---------------- Schema ---------------- */
