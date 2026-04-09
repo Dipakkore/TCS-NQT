@@ -102,7 +102,7 @@ export default function Login() {
       </div>
 
       <footer className="footer">
-        © 2026 Tata Consultancy Services. All Rights Reserved.
+        © 2026 Tata Consultancy Services. All Rights Reserved..
       </footer>
     </div>
   );
