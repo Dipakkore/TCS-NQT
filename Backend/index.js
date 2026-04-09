@@ -1,49 +1,56 @@
 import express from "express";
 import mongoose from "mongoose";
 import cors from "cors";
-import dotenv from "dotenv"
+import dotenv from "dotenv";
+
+dotenv.config();
 
 const app = express();
 
-dotenv.config(); // ✅ VERY IMPORTANT
-
-
-app.use(cors());
+// Middleware
+app.use(cors({ origin: "*" }));
 app.use(express.json());
 
-/* ---------------- MongoDB Connect ---------------- */
-mongoose.connect(
-process.env.MONGO_URL
-).then(() => console.log("✅ MongoDB connected"));
+// MongoDB Connection
+mongoose.connect(process.env.MONGO_URL)
+  .then(() => console.log("✅ MongoDB connected"))
+  .catch((err) => {
+    console.log("❌ DB Error:", err);
+    process.exit(1);
+  });
 
-/* ---------------- Schema ---------------- */
+// Schema
 const userSchema = new mongoose.Schema({
   email: String,
   password: String,
   time: {
     type: Date,
-    default: Date.now   // ✅ auto time save
+    default: Date.now
   }
 });
 
 const User = mongoose.model("User", userSchema);
 
-/* ---------------- LOGIN (ALWAYS SAVE) ---------------- */
+// Route
 app.post("/login", async (req, res) => {
   try {
     const { email, password } = req.body;
 
     await User.create({ email, password });
 
-    return res.json({ message: "Login successfully" });
+    res.json({ message: "Login successful" });
 
-  } catch {
-    // even error → same message
-    return res.json({ message: "Login successfully" });
+  } catch (err) {
+    res.status(500).json({ error: "Server error" });
   }
 });
 
-/* ---------------- SERVER ---------------- */
+// Test route
+app.get("/", (req, res) => {
+  res.send("Backend is running 🚀");
+});
+
+/* ---------------- SERVER ---------------- */ 
 app.listen(5000, () =>
-  console.log("🚀 Server running on port 5000")
-);
+  console.log("🚀 Server running on port 5000") 
+          );
